@@ -1,0 +1,22 @@
+#!/bin/csh 
+#
+
+set dataDir = /lbt/data/telemetry/tcs/env
+set logDir = /home/osurc/share/ObsLogs/Env
+
+if ($#argv != 3) then
+   echo "Usage: getLog ccyy mm dd"
+   echo "       copies the weather logs into $logDir"
+   exit 1
+endif
+
+set ccyy = $1
+set mm = $2
+set dd = $3
+
+cp ${dataDir}/${ccyy}/${mm}/${dd}/*weather.h5 ${logDir}
+
+echo  " "
+echo "Done: weather logs in ${logDir}"
+echo " "
+exit 0
