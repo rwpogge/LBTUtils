@@ -29,7 +29,7 @@ warnings.filterwarnings('ignore',category=RuntimeWarning, append=True)
 
 # where is the raw data repository?
 
-repoDir = '/lbt/data/repository'
+repoDir = '/lbt/data/new/PEPSI'
 
 # where do logs go
 
@@ -59,19 +59,19 @@ tabFmts = ['20.20s','4.4s','7.7s','40.40s','11.11s','11.11s','6.6s','10.10s','10
 
 # A valid repository directory?
 
-dataDir = f'{repoDir}/{obsDate}'
+dataDir = f'{repoDir}'
 
 if not os.path.isdir(dataDir):
-    print(f'Could not find data directory {obsDate} in {repoDir}')
+    print(f'Could not find data directory {dataDir}')
     print(f'Usage: pepsiLog ccyymmdd')
     sys.exit(1)
 
 # Get a list of all pepsi data matching pattern
 
-pepsiFiles = glob.glob(f'{repoDir}/{obsDate}/pepsi?.{obsDate}.*.fits')
+pepsiFiles = glob.glob(f'{repoDir}/pepsi?.{obsDate}.*.fits')
 
 if len(pepsiFiles) == 0:
-    print(f'No PEPSI FITS files found in directory {obsDate} in {repoDir}')
+    print(f'No PEPSI FITS files found in directory {repoDir}')
     print(f'No PEPSI data log created.')
     sys.exit(1)
 
@@ -92,7 +92,12 @@ numCal = 0
 
 for fitsFile in pepsiFiles:
     hdr = getheader(fitsFile)
-    if hdr['PARTNER'].upper() == 'CALIBRATION':
+    try:
+        partnerID = hdr['PARTNER']
+    except:
+        partnerID = 'UNKNOWN'
+
+    if partnerID.upper() == 'CALIBRATION':
         numCal += 1
     else:
         outStr = ''
